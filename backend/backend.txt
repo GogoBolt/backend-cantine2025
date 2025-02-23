@@ -1,0 +1,12 @@
+backend/
+├── .env.local              :: Variables d'environnement locales
+├── .env.production         :: Variables d'environnement de production
+├── .gitignore   			:: Fichiers à ignorer dans Git
+├──	.seccret                :: Fichiers à ignorer dans Git
+├── docker-compose.yml      :: Configuration Docker pour les services backend
+├── server/                 :: Code backend (peut être un serveur Express, NestJS, etc.)
+│   └── tsconfig.json       :: Configuration TypeScript pour le backend
+├── [supabase]              :: Dossier pour gérer les migrations, schémas de la base de données
+│   └── [migrations]        :: Fichiers de migration Supabase
+├── nhost/                  :: Configuration et services liés à Nhost
+│   └── [configuration]     :: Configuration pour Nhost et autres services backend
