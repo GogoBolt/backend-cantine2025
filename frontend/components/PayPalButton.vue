@@ -1,6 +1,6 @@
 <!-- This component will be replaced with Nhost payment integration -->
 <template>
-  <button 
+  <button
     class="w-full px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
     @click="handlePayment"
   >
@@ -14,10 +14,6 @@ const emit = defineEmits<{
   error: [error: Error];
 }>();
 
-const props = defineProps<{
-  amount: number;
-  currency?: string;
-}>();
 
 const handlePayment = async () => {
   // TODO: Implement Nhost payment integration

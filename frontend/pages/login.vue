@@ -5,7 +5,7 @@
         <h1 class="text-3xl font-bold text-gray-900">Connexion</h1>
         <p class="mt-2 text-gray-600">Bienvenue sur GogoSoft Cantine</p>
       </div>
-      
+
       <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
@@ -18,7 +18,7 @@
             placeholder="vous@exemple.com"
           />
         </div>
-        
+
         <div>
           <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
           <input
@@ -91,7 +91,7 @@
 
       <div class="mt-8 text-center">
         <p class="text-sm text-gray-600">
-          Pas encore de compte ? 
+          Pas encore de compte ?
           <NuxtLink to="/register" class="font-medium text-primary-600 hover:text-primary-700 transition-colors">
             S'inscrire
           </NuxtLink>
@@ -103,16 +103,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useNuxtApp, navigateTo }from 'nuxt/app';
-import { signInEmailOTPPromise } from '@nhost/nhost-js';
+import { useNuxtApp, navigateTo } from '#imports';
+// import { signInEmailOTPPromise } from '@nhost/nhost-js';
 import type { NhostAuthMethods } from '~/types/nhost';
 const { auth } = useNuxtApp() as unknown as { auth: NhostAuthMethods };
 const email = ref('');
-const password = ref(''); 
+const password = ref('');
 
 const handleLogin = async () => {
   try {
-    const { session, error } = await auth.signIn({
+    const {  error } = await auth.signIn({
       email: email.value,
       password: password.value,
     });
@@ -129,11 +129,11 @@ const handleLogin = async () => {
 
 const loginWithProvider = async (provider: string) => {
   try {
-    const { session, error } = await auth.signIn({
+    const {  session  , error } = await auth.signIn({
       email: '',
       password: ''
     });
-    
+console.log(session);
     if (error) {
       console.error(`Erreur avec ${provider}:`, error.message);
     } else {

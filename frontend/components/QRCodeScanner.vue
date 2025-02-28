@@ -1,59 +1,71 @@
 <template>
-  <div class="bg-white p-6 rounded-lg shadow-lg">
-    <h2 class="text-xl font-semibold mb-4">Scanner de QR Code</h2>
-    <div class="relative">
-      <qrcode-stream
-        v-if="isScanning"
-        @decode="onDecode"
-        @init="onInit"
-        class="rounded-lg overflow-hidden"
-      />
-      <div v-else class="text-center p-8 border-2 border-dashed border-gray-300 rounded-lg">
-        <button
-          @click="startScanning"
-          class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-        >
-          Démarrer le scan
-        </button>
+  <div class="qr-scanner">
+    <qrcode-stream @decode="onDecode" @init="onInit">
+      <div class="overlay" v-if="error">
+        {{ error }}
       </div>
-    </div>
-    <div v-if="error" class="mt-4 p-4 bg-red-50 text-red-600 rounded-lg">
-      {{ error }}
-    </div>
+    </qrcode-stream>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { QrcodeStream } from 'vue-qrcode-reader';
+import { toast } from 'vue3-toastify';
 
-const emit = defineEmits<{
-  scanned: [value: string]
-}>();
+interface QRCodeError extends Error {
+  name: 'NotAllowedError' | 'NotFoundError' | 'NotReadableError' | 'OverconstrainedError';
+  message: string;
+}
 
-const isScanning = ref(false);
 const error = ref('');
 
-const startScanning = () => {
-  isScanning.value = true;
-  error.value = '';
+const emit = defineEmits<{
+  (e: 'scanned', value: string): void
+}>();
+
+const onDecode = (decodedString: string) => {
+  emit('scanned', decodedString);
 };
 
-const onDecode = (value: string) => {
-  emit('scanned', value);
-};
-
-const onInit = async (promise: Promise<void>) => {
+const onInit = async (promise: Promise<MediaStream>) => {
   try {
     await promise;
-  } catch (e: any) {
-    if (e.name === 'NotAllowedError') {
+  } catch (e) {
+    const qrError = e as QRCodeError;
+    if (qrError.name === 'NotAllowedError') {
       error.value = "L'accès à la caméra a été refusé";
-    } else if (e.name === 'NotFoundError') {
+      toast.error("L'accès à la caméra a été refusé");
+    } else if (qrError.name === 'NotFoundError') {
       error.value = 'Aucune caméra n\'a été trouvée';
+      toast.error('Aucune caméra n\'a été trouvée');
     } else {
       error.value = 'Erreur lors de l\'initialisation de la caméra';
+      toast.error('Erreur lors de l\'initialisation de la caméra');
+      console.error('QR Code error:', qrError);
     }
   }
 };
 </script>
+
+<style scoped>
+.qr-scanner {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+</style>

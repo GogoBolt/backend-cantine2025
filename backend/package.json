@@ -1,0 +1,36 @@
+{
+  "name": "cantine2025",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "HOST=0.0.0.0 nuxt dev",
+    "clean": "rm -rf node_modules/ package-lock.json .nuxt/ .nhost/ .output/ .bolt/ .nhost/ .nojekyll",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@nhost/nhost-js": "^2.2.18",
+    "@nhost/nuxt": "^0.1.9",
+    "@pinia/nuxt": "^0.5.1",
+    "nuxt": "^3.13.0",
+    "pinia": "^2.1.7",
+    "qrcode": "^1.5.4",
+    "vue3-toastify": "^0.2.2"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.11.4",
+    "@types/node": "^20.11.28"
+  },
+  "keywords": [
+    "cantine",
+    "QRCode",
+    "badge scolaire"
+  ],
+  "author": "Thierry Gogo",
+  "license": "ISC",
+  "description": "Projet de gestion de cantine scolaire avec QRCode sur badge"
+}

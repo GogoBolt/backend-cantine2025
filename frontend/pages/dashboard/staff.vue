@@ -7,7 +7,7 @@
 
     <div class="grid gap-6">
       <QRCodeScanner @scanned="handleScan" />
-      
+
       <div v-if="lastScan" class="bg-white p-6 rounded-lg shadow-lg">
         <h2 class="text-xl font-semibold mb-4">Dernier scan</h2>
         <div class="space-y-2">
@@ -27,9 +27,10 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs';
-import {ref} from 'vue';
+// imp8ort dayjs from 'dayjs';
 
+import {ref} from 'vue';
+import dayjs from '~/plugins/dayjs';
 interface ScanResult {
   studentId: string;
   time: string;
@@ -41,7 +42,7 @@ const lastScan = ref<ScanResult | null>(null);
 const handleScan = (value: string) => {
   // Format attendu: "student:ID"
   const studentId = value.split(':')[1];
-  
+
   // TODO: Vérifier la validité du ticket dans la base de données
   const isValid = true;
 

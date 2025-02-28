@@ -4,7 +4,7 @@
       <h1 class="text-3xl font-bold text-gray-900">Tableau de bord - Parent</h1>
       <p class="mt-2 text-gray-600">Gérer les tickets-repas de vos enfants</p>
     </div>
-
+d
     <div class="grid gap-6">
       <!-- Solde et rechargement -->
       <div class="bg-white p-6 rounded-lg shadow-lg">
@@ -20,7 +20,7 @@
             Recharger
           </button>
         </div>
-        
+
         <div class="border-t pt-4">
           <h3 class="text-sm font-medium text-gray-700 mb-2">Dernières transactions</h3>
           <div class="space-y-2">
@@ -129,7 +129,6 @@
 import { ref } from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue';
 import dayjs from 'dayjs';
-
 const showRechargeModal = ref(false);
 const ticketsToRecharge = ref('10');
 
@@ -148,12 +147,12 @@ const getAmount = () => {
   return prices[ticketsToRecharge.value as keyof typeof prices];
 };
 
-const handlePayment = async (method: 'card' | 'paypal') => {
+const handlePayment = async (_p0: string) => {
   // TODO: Implémenter le paiement
   showRechargeModal.value = false;
 };
 
-const handlePayPalSuccess = (details: any) => {
+const handlePayPalSuccess = () => {
   // TODO: Valider le paiement côté serveur
   showRechargeModal.value = false;
 };

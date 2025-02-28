@@ -1,38 +1,19 @@
-import { defineNuxtRouteMiddleware, navigateTo } from 'nuxt/app';
 import { useAuth } from '~/composables/auth';
-import type { RouteLocationNormalized } from 'vue-router';
+import { defineNuxtRouteMiddleware, navigateTo,  } from '#imports';
 
-export default defineNuxtRouteMiddleware((to: RouteLocationNormalized) => {
-  const { isAuthenticated, getUserRole } = useAuth();
-  const publicRoutes = ['/', '/login', '/register', '/contact'];
+export default defineNuxtRouteMiddleware((to: { path: string; }) => {
+  const { isAuthenticated } = useAuth();
 
-  // Allow access to public routes
-  if (publicRoutes.includes(to.path)) {
-    return;
-  }
+  // Liste des routes publiques qui ne nécessitent pas d'authentification
+  const publicRoutes = ['/login', '/register', '/'];
 
-  // Check if user is authenticated
-  if (!isAuthenticated.value) {
+  // Si l'utilisateur n'est pas authentifié et essaie d'accéder à une route protégée
+  if (!isAuthenticated.value && !publicRoutes.includes(to.path)) {
     return navigateTo('/login');
   }
 
-  // Handle role-based routing
-  if (to.path.startsWith('/dashboard')) {
-    const userRole = getUserRole.value;
-    const allowedRoles: Record<string, string[]> = {
-      '/dashboard/admin': ['admin'],
-      '/dashboard/parent': ['parent'],
-      '/dashboard/staff': ['staff'],
-      '/dashboard/teacher': ['teacher'],
-      '/dashboard/developer': ['developer'],
-      '/dashboard/supervisor': ['supervisor']
-    };
-
-    // Check if user has permission to access the route
-    const routeRoles = allowedRoles[to.path];
-    if (routeRoles && !routeRoles.includes(userRole as string)) {
-      // Redirect to appropriate dashboard based on role
-      return navigateTo(`/dashboard/${userRole}`);
-    }
+  // Si l'utilisateur est authentifié et essaie d'accéder à login ou register
+  if (isAuthenticated.value && ['/login', '/register'].includes(to.path)) {
+    return navigateTo('/dashboard');
   }
 });

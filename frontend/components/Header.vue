@@ -181,7 +181,7 @@
 import { ref } from 'vue';
 import { useAuth } from '~/composables/auth';
 import { toast } from 'vue3-toastify';
-import { navigateTo } from 'nuxt/app';
+import { navigateTo } from '#imports';
 
 const { isAuthenticated, logout } = useAuth();
 const mobileMenuOpen = ref(false);
@@ -193,6 +193,7 @@ const handleLogout = async () => {
     navigateTo('/login');
   } catch (error) {
     toast.error('Erreur lors de la déconnexion');
+    console.error('Erreur de déconnexion:', error);
   }
 };
 </script>

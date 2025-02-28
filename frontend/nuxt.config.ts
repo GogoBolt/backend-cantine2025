@@ -1,50 +1,65 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import {defineNuxtConfig} from 'nuxt/config'
+import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
-  ssr: false,
-  devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss'],
-
+  ssr: true,
+  modules: [
+    '@nuxtjs/tailwindcss'
+  ],
   plugins: [
     '~/plugins/toastify.ts',
-    '~/plugins/nhost.ts'
+    '~/plugins/nhost.ts',
+    '~/plugins/dayjs.ts',
+    '~/plugins/qrcode-reader.ts'
   ],
-
   runtimeConfig: {
     public: {
-      nhostSubdomain: process.env.NHOST_SUBDOMAIN || 'local',
-      nhostRegion: process.env.NHOST_REGION || 'local',
-      nhostBackendUrl: process.env.NHOST_BACKEND_URL || 'http://localhost:1337/v1',
-      nhostAdminSecret: process.env.NHOST_ADMIN_SECRET,
-      appTitle: 'Gestion des cantines scolaires',
-      appDescription: 'Application de gestion des cantines scolaires'
-    }
+      NHOST_SUBDOMAIN: process.env.NUXT_PUBLIC_NHOST_SUBDOMAIN,
+      NHOST_REGION: process.env.NUXT_PUBLIC_NHOST_REGION,
+      NHOST_BACKEND_URL: process.env.NUXT_PUBLIC_NHOST_BACKEND_URL,
+      NHOST_AUTH_URL: process.env.NUXT_PUBLIC_NHOST_AUTH_URL,
+      NHOST_STORAGE_URL: process.env.NUXT_PUBLIC_NHOST_STORAGE_URL,
+      NHOST_FUNCTIONS_URL: process.env.NUXT_PUBLIC_NHOST_FUNCTIONS_URL,
+      NHOST_DASHBOARD_URL: process.env.NUXT_PUBLIC_NHOST_DASHBOARD_URL,
+      NHOST_POSTGRES_URL: process.env.NUXT_PUBLIC_NHOST_POSTGRES_URL,
+    },
   },
-
+  build: {
+    transpile: ['@headlessui/vue', 'dayjs', 'vue-router', 'vue3-toastify', 'vue-qrcode-reader', '@nhost/nhost-js', 'qrcode.vue']
+  },
   typescript: {
     strict: true,
     typeCheck: true,
-    shim: false
-  },
-
-  build: {
-    transpile: ['@headlessui/vue']
-  },
-
-  app: {
-    head: {
-      title: 'Gestion des cantines scolaires',
-      meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Application de gestion des cantines scolaires' }
-      ],
-      link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-      ]
+    shim: false,
+    tsConfig: {
+      compilerOptions: {
+        paths: {
+          '@headlessui/vue': ['./node_modules/@headlessui/vue'],
+          'dayjs': ['./node_modules/dayjs', './types/dayjs'],
+          'vue-router': ['./node_modules/vue-router'],
+          'vue3-toastify': ['./node_modules/vue3-toastify', './types/vue3-toastify'],
+          'vue-qrcode-reader': ['./node_modules/vue-qrcode-reader', './types/vue-qrcode-reader'],
+          '@nhost/nhost-js': ['./node_modules/@nhost/nhost-js', './types/nhost-js']
+        }
+      }
     }
   },
-
-  compatibilityDate: '2025-02-21'
-});
+  vite: {
+    optimizeDeps: {
+      include: ['@headlessui/vue', 'dayjs', 'vue', 'vue-router', 'vue3-toastify', 'vue-qrcode-reader', '@nhost/nhost-js']
+    },
+    resolve: {
+      alias: {
+        '@headlessui/vue': '@headlessui/vue',
+        'dayjs': 'dayjs',
+        'vue-router': 'vue-router',
+        'vue3-toastify': 'vue3-toastify',
+        'vue-qrcode-reader': 'vue-qrcode-reader',
+        '@nhost/nhost-js': '@nhost/nhost-js'
+      }
+    }
+  },
+  css: [
+    'vue3-toastify/dist/index.css'
+  ]
+})

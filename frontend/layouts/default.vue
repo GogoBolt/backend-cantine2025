@@ -17,13 +17,13 @@ import Header from '~/components/Header.vue';
 import Footer from '~/components/Footer.vue';
 import { defineComponent } from 'vue';
 
-import { toastContainers, toast } from 'vue3-toastify';
+import {  toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
-// Enregistrez le composant ToastContainer
+// Enregistrez le composant toast
 defineComponent({
   components: {
-    toastContainers,
+    toast,
   },
 });
 </script>
